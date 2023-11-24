@@ -1722,7 +1722,7 @@
         "t": "set",
         "p": "payload",
         "pt": "msg",
-        "to": "{\t    \"device_class\": \"energy\",\t    \"unit_of_measurement\": \"Wh\",\t    \"value_template\": \"{{value_json.mainsDeltaEnergy}}\"\t}",
+        "to": "{\t    \"device_class\": \"energy\",\t    \"unit_of_measurement\": \"Wh\",\t    \"value_template\": \"{{ (value_json.mainsDeltaEnergy | int(0)) + (states(entity_id) | int(0)) }}\"\t}",
         "tot": "jsonata"
       }
     ],
@@ -1731,7 +1731,7 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 1330,
+    "x": 1340,
     "y": 1560,
     "wires": [
       [
@@ -1785,7 +1785,7 @@
         "t": "set",
         "p": "sensor_id",
         "pt": "msg",
-        "to": "power_factor",
+        "to": "Power Factor",
         "tot": "str"
       },
       {
