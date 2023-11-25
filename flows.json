@@ -1,1 +1,2117 @@
-[{"id":"51122177d6ae6af1","type":"switch","z":"b4985dde22c96f8f","name":"Sort Topics","property":"topic","propertyType":"msg","rules":[{"t":"cont","v":"/door","vt":"str"},{"t":"cont","v":"/waterDetection","vt":"str"},{"t":"cont","v":"/usbPowered","vt":"str"},{"t":"cont","v":"/tamperDetection","vt":"str"},{"t":"cont","v":"/batteryCoverPresent","vt":"str"},{"t":"cont","v":"/cableConnected","vt":"str"},{"t":"cont","v":"/buttonPressed","vt":"str"},{"t":"cont","v":"/buttonReleased","vt":"str"},{"t":"cont","v":"/humidity","vt":"str"},{"t":"cont","v":"/temperature","vt":"str"},{"t":"cont","v":"/rssi","vt":"str"},{"t":"cont","v":"/batteryPercentage","vt":"str"},{"t":"cont","v":"/iaqIndex","vt":"str"},{"t":"cont","v":"/aqmScores","vt":"str"},{"t":"cont","v":"/tvoc","vt":"str"},{"t":"cont","v":"/CO2","vt":"str"},{"t":"cont","v":"/PM2_5MassConcentration","vt":"str"},{"t":"cont","v":"/ambientNoise","vt":"str"},{"t":"cont","v":"/probeType","vt":"str"},{"t":"cont","v":"/missedConnections","vt":"str"},{"t":"cont","v":"/ambientPressure","vt":"str"},{"t":"cont","v":"/mainsVolts","vt":"str"},{"t":"cont","v":"/mainsCurrent","vt":"str"},{"t":"cont","v":"/mainsRealPower","vt":"str"},{"t":"cont","v":"/mainsApparentPower","vt":"str"},{"t":"cont","v":"/mainsDeltaEnergy","vt":"str"},{"t":"cont","v":"/mainsFrequency","vt":"str"},{"t":"cont","v":"/mainsPowerControl","vt":"str"},{"t":"cont","v":"/mainsPowerFactor","vt":"str"},{"t":"cont","v":"/missedConnections","vt":"str"},{"t":"else"}],"checkall":"false","repair":false,"outputs":31,"x":890,"y":560,"wires":[["a55c55f776c4d555"],["950362e69c63c6d4"],["766b6a3def0ba8c9"],["4397da643f084af3"],["73bf592f576861e2"],["07fa8aa7128f4c13"],["d3b6f68bb9ea278d"],["1c29ed958dce1ff5"],["791fb525caa13c92"],["066c52b53603d15a"],["5720db72d29eaf2b"],["36f6948bd64dce3c"],["bce94e868148159b"],["544ffa2f4067482d"],["7022cd1d3bca66e8"],["76b35e011726e185"],["6dddf8c4baa7fd84"],["10a5fbfccbddfacd"],["10a5fbfccbddfacd"],["10a5fbfccbddfacd"],["10a5fbfccbddfacd"],["2aba077c07890374"],["975662dfa813c5f5"],["8d93f2ee79527fba"],["04321e7a03e72bf4"],["d32895c4730a3dc4"],["35df35d7ea3d6eb8"],["10a5fbfccbddfacd"],["b50127044f042625"],["10a5fbfccbddfacd"],["10a5fbfccbddfacd"]]},{"id":"56fb163c58ae8ef4","type":"mqtt out","z":"b4985dde22c96f8f","name":"Retain-True","topic":"","qos":"0","retain":"true","respTopic":"","contentType":"","userProps":"","correl":"","expiry":"","broker":"3a8e476dcb7978ce","x":1790,"y":400,"wires":[]},{"id":"4f983773eee2edc8","type":"debug","z":"b4985dde22c96f8f","name":"","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","statusVal":"","statusType":"auto","x":622,"y":656,"wires":[]},{"id":"10a5fbfccbddfacd","type":"debug","z":"b4985dde22c96f8f","name":"","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","statusVal":"","statusType":"auto","x":870,"y":900,"wires":[]},{"id":"32a37685372c1e27","type":"counter","z":"b4985dde22c96f8f","name":"","init":"0","step":"1","lower":"","upper":"","mode":"increment","outputs":1,"x":740,"y":560,"wires":[["51122177d6ae6af1"]]},{"id":"c901926bc59ad831","type":"group","z":"b4985dde22c96f8f","name":"Not required but a flow that combines sensor name to mac and serial binding","style":{"label":true,"label-position":"se","stroke":"#ffff00","color":"#ff0000"},"nodes":["7230ee858df28e40","d4de5f45de3c4e77"],"x":254,"y":739,"w":491,"h":130},{"id":"7230ee858df28e40","type":"function","z":"b4985dde22c96f8f","g":"c901926bc59ad831","name":"create msg.details debug","func":"//msg.dev_details = global.get( msg.sensor_mac + \"_dev\")\nmsg.details = {\n    \"sensor_devvar\" : msg.sensor_mac + \"_dev\" , \n    \"sensor_name\" : msg.sensor_name ,\n    \"sensor_mac\" : msg.sensor_mac ,\n    \"sensor_mac_clean\" : msg.sensor_mac_clean ,\n    \"sensor_dev_details\" : msg.sensor_dev_details\n}\nreturn msg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":390,"y":780,"wires":[["d4de5f45de3c4e77"]]},{"id":"d4de5f45de3c4e77","type":"debug","z":"b4985dde22c96f8f","g":"c901926bc59ad831","name":"Debug Naming info","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"details","targetType":"msg","statusVal":"","statusType":"auto","x":390,"y":820,"wires":[]},{"id":"04c362a1b35ff306","type":"group","z":"b4985dde22c96f8f","name":"grab the sensor info and add attribute with name","style":{"stroke":"#6f2fa0","label":true,"color":"#ff0000"},"nodes":["166dfe9b0266990e","b1d02a1ae6308298","6cedcdd541e32254","fbdbb211bc7639cc","e417f26b9ed51ac5"],"x":14,"y":471,"w":660,"h":130},{"id":"166dfe9b0266990e","type":"function","z":"b4985dde22c96f8f","g":"04c362a1b35ff306","name":"set topic discovery vars","func":"msg.discovery_sensor = \"homeassistant/sensor/\"\nmsg.discovery_binary_sensor = \"homeassistant/binary_sensor/\"\nmsg.discovery_button = \"homeassistant/button/\"\nreturn msg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":370,"y":512,"wires":[["6cedcdd541e32254"]]},{"id":"b1d02a1ae6308298","type":"function","z":"b4985dde22c96f8f","g":"04c362a1b35ff306","name":"Look up Name","func":"var device = global.get(msg.sensor_mac);\nmsg.sensor_name = device.name;\nmsg.device = device\nreturn msg; ","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":136,"y":560,"wires":[["fbdbb211bc7639cc"]]},{"id":"6cedcdd541e32254","type":"string","z":"b4985dde22c96f8f","g":"04c362a1b35ff306","name":"Filter MAC","methods":[{"name":"delLeftMost","params":[{"type":"str","value":"/ble/"}]},{"name":"delRightMost","params":[{"type":"str","value":"/"}]},{"name":"delRightMost","params":[{"type":"str","value":"/gateway"}]},{"name":"toLowerCase","params":[]}],"prop":"topic","propout":"sensor_mac","object":"msg","objectout":"msg","x":578,"y":512,"wires":[["b1d02a1ae6308298"]]},{"id":"fbdbb211bc7639cc","type":"string","z":"b4985dde22c96f8f","g":"04c362a1b35ff306","name":"replace colon with dash","methods":[{"name":"replaceAll","params":[{"type":"str","value":":"},{"type":"str","value":"-"}]}],"prop":"sensor_mac","propout":"sensor_mac_clean","object":"msg","objectout":"msg","x":374,"y":560,"wires":[["7230ee858df28e40","4f983773eee2edc8","32a37685372c1e27"]]},{"id":"e417f26b9ed51ac5","type":"mqtt in","z":"b4985dde22c96f8f","g":"04c362a1b35ff306","name":"HA MQTT","topic":"meraki/v1/mt/+/ble/#","qos":"2","datatype":"json","broker":"f874054eb620e77a","nl":false,"rap":false,"rh":"2","inputs":0,"x":100,"y":512,"wires":[["166dfe9b0266990e","4f983773eee2edc8"]]},{"id":"f874054eb620e77a","type":"mqtt-broker","name":"HA_Mosquitto_Broker","broker":"localhost","port":"1883","clientid":"","autoConnect":true,"usetls":false,"protocolVersion":"5","keepalive":"60","cleansession":true,"birthTopic":"ha-node-red/birth","birthQos":"0","birthPayload":"im alive!","birthMsg":{"contentType":"text/plain"},"closeTopic":"ha-node-red/euthanasia","closeQos":"0","closePayload":"Im dying!","closeMsg":{"contentType":"text/plain"},"willTopic":"ha-node-red/death","willQos":"0","willPayload":"Im dead!","willMsg":{"contentType":"text/plain"},"userProps":"","sessionExpiry":""},{"id":"d92d917b195451bc","type":"group","z":"b4985dde22c96f8f","name":"Binary Sensors","style":{"stroke":"#0070c0","label":true},"nodes":["d3b6f68bb9ea278d","1c3f4816a586bdef","07fa8aa7128f4c13","73bf592f576861e2","4397da643f084af3","766b6a3def0ba8c9","950362e69c63c6d4","a55c55f776c4d555","919239d3efebfb3a","bc4347495b61fc93","328f029e12bebf17","4a61d18450e34fbf","2fd016e89faf95b9","151dc8e579f05007","442dd2c612d3187a","d874b1fb081f2a16","fdf83bbd52465411","e068c857e7b21e63"],"x":1074,"y":34,"w":579,"h":367},{"id":"d3b6f68bb9ea278d","type":"delay","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"3","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1160,"y":360,"wires":[["1c3f4816a586bdef"]]},{"id":"1c3f4816a586bdef","type":"change","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"buttonPressed_not_MT30","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"buttonPressed","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"availability_topic\": msg.old_topic,\t   \"command_topic\" : msg.old_topic,\t   \"command_template\": \"{{value_json.buttonPressed}}\",\t   \"availability_template\": \"{{value_json.buttonPressed}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1360,"y":360,"wires":[["fdf83bbd52465411"]]},{"id":"07fa8aa7128f4c13","type":"delay","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"3","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1160,"y":315,"wires":[["151dc8e579f05007"]]},{"id":"73bf592f576861e2","type":"delay","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"3","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1160,"y":267,"wires":[["2fd016e89faf95b9"]]},{"id":"4397da643f084af3","type":"delay","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"3","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1160,"y":219,"wires":[["4a61d18450e34fbf"]]},{"id":"766b6a3def0ba8c9","type":"delay","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"3","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1160,"y":171,"wires":[["328f029e12bebf17"]]},{"id":"950362e69c63c6d4","type":"delay","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"3","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1160,"y":123,"wires":[["bc4347495b61fc93"]]},{"id":"a55c55f776c4d555","type":"delay","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"3","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1160,"y":75,"wires":[["919239d3efebfb3a"]]},{"id":"919239d3efebfb3a","type":"change","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"Door","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"door","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"device_class\": msg.sensor_type ,\t   \"payload_on\": true,\t   \"payload_off\": false,\t   \"value_template\": \"{{value_json.open}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1296,"y":75,"wires":[["442dd2c612d3187a"]]},{"id":"bc4347495b61fc93","type":"change","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"Moisture","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"moisture","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"device_class\": msg.sensor_type ,\t   \"payload_on\": true,\t   \"payload_off\": false,\t   \"value_template\": \"{{value_json.wet}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1310,"y":123,"wires":[["442dd2c612d3187a"]]},{"id":"328f029e12bebf17","type":"change","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"USB Power","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"power","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"device_class\": msg.sensor_type ,\t   \"payload_on\": true,\t   \"payload_off\": false,\t   \"entity_category\": \"diagnostic\",\t   \"value_template\": \"{{value_json.usbPowered}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1320,"y":171,"wires":[["442dd2c612d3187a"]]},{"id":"4a61d18450e34fbf","type":"change","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"Tamper","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"tamper","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"device_class\": msg.sensor_type ,\t   \"payload_on\": true,\t   \"payload_off\": false,\t   \"entity_category\": \"diagnostic\",\t   \"value_template\": \"{{value_json.tamperDetection}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1310,"y":219,"wires":[["442dd2c612d3187a"]]},{"id":"2fd016e89faf95b9","type":"change","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"Battery Cover","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"batteryCover","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"payload_on\": true,\t   \"payload_off\": false,\t   \"entity_category\": \"diagnostic\",\t   \"value_template\": \"{{value_json.batteryCoverPresent}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1330,"y":267,"wires":[["442dd2c612d3187a"]]},{"id":"151dc8e579f05007","type":"change","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"Cable Connected","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"cableConnected","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"payload_on\": true,\t   \"payload_off\": false,\t   \"value_template\": \"{{value_json.cableConnected}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1340,"y":315,"wires":[["442dd2c612d3187a"]]},{"id":"442dd2c612d3187a","type":"function","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"Binary Sensor","func":"msg.topic = msg.discovery_binary_sensor + msg.sensor_mac_clean + \"/\" + msg.sensor_type + \"/config\" \nmsg.payload.state_topic = msg.old_topic\nreturn msg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":1540,"y":186,"wires":[["d874b1fb081f2a16","56fb163c58ae8ef4"]]},{"id":"d874b1fb081f2a16","type":"debug","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","statusVal":"","statusType":"auto","x":1540,"y":141,"wires":[]},{"id":"fdf83bbd52465411","type":"function","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"Button","func":"msg.topic = msg.discovery_button + msg.sensor_mac_clean + \"/\" + msg.sensor_type + \"/config\" \nreturn msg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":1537,"y":313,"wires":[["e068c857e7b21e63","56fb163c58ae8ef4"]]},{"id":"e068c857e7b21e63","type":"debug","z":"b4985dde22c96f8f","g":"d92d917b195451bc","name":"","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","statusVal":"","statusType":"auto","x":1557,"y":233,"wires":[]},{"id":"92e98dd017c3b979","type":"group","z":"b4985dde22c96f8f","name":"Create The Global Key Store","style":{"stroke":"#92d04f","label":true},"nodes":["024adea52310ac7e","8e0fc22bfd70dba4","3c1065a5aedb0643","7b56b52871bee5d6","a8267de3968784c9","ebeafd293ebc80ee","ec98cc703fef71ab","e3fc69bb049540b2"],"x":132,"y":87,"w":638,"h":226},{"id":"024adea52310ac7e","type":"inject","z":"b4985dde22c96f8f","g":"92e98dd017c3b979","name":"Build Org-Wide name dB","props":[{"p":"payload"}],"repeat":"300","crontab":"","once":true,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":298,"y":128,"wires":[["8e0fc22bfd70dba4"]]},{"id":"8e0fc22bfd70dba4","type":"change","z":"b4985dde22c96f8f","g":"92e98dd017c3b979","name":"Set the Meraki Org_ID","rules":[{"t":"set","p":"org_id","pt":"msg","to":"125940","tot":"str"}],"action":"","property":"","from":"","to":"","reg":false,"x":592,"y":128,"wires":[["3c1065a5aedb0643"]]},{"id":"3c1065a5aedb0643","type":"secret","z":"b4985dde22c96f8f","g":"92e98dd017c3b979","name":"apiKey","x":310,"y":176,"wires":[["7b56b52871bee5d6"]]},{"id":"7b56b52871bee5d6","type":"function","z":"b4985dde22c96f8f","g":"92e98dd017c3b979","name":"Headers for Device List","func":"msg.url = \"https://api.meraki.com/api/v1/organizations/\" + msg.org_id +\"/devices\";\nmsg.headers = {};\nmsg.headers['content-type'] = 'application/json';\nmsg.headers['X-Cisco-Meraki-API-Key'] = msg.secret ;\nreturn msg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":610,"y":176,"wires":[["a8267de3968784c9"]]},{"id":"a8267de3968784c9","type":"http request","z":"b4985dde22c96f8f","g":"92e98dd017c3b979","name":"Devices - Req","method":"GET","ret":"obj","paytoqs":"ignore","url":"","tls":"","persist":false,"proxy":"","authType":"","senderr":true,"x":292,"y":224,"wires":[["ebeafd293ebc80ee"]]},{"id":"ebeafd293ebc80ee","type":"function","z":"b4985dde22c96f8f","g":"92e98dd017c3b979","name":"Create Global Key Store","func":"for (let i = 0 ; i < msg.payload.length; i++) {\n  var device = {};\n  device.identifiers = [ msg.payload[i].serial ];\n  device.name = msg.payload[i].name ;\n//  device.mac = msg.payload[i].mac ;\n  device.model = msg.payload[i].model ;\n  device.sw_version = msg.payload[i].firmware ;\n  device.configuration_url = msg.payload[i].url ;\n  device.manufacturer = \"Cisco Meraki\" ;\n//  device.latitude = msg.payload[i].lat ;\n//  device.longitude = msg.payload[i].lng ;\n  devmac = msg.payload[i].mac ; \n  global.set(devmac , device) ;\n  \n}\nreturn msg;\n","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":634,"y":224,"wires":[["ec98cc703fef71ab"]]},{"id":"ec98cc703fef71ab","type":"function","z":"b4985dde22c96f8f","g":"92e98dd017c3b979","name":"validate","func":"msg.device = global.get(\"2c:3f:0b:f9:f8:62\");\n\nreturn msg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":296,"y":272,"wires":[["e3fc69bb049540b2"]]},{"id":"e3fc69bb049540b2","type":"debug","z":"b4985dde22c96f8f","g":"92e98dd017c3b979","name":"","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","statusVal":"","statusType":"auto","x":426,"y":272,"wires":[]},{"id":"1c71852263741650","type":"group","z":"b4985dde22c96f8f","style":{"stroke":"#11120f","stroke-opacity":"1","fill":"#23241f","fill-opacity":"0.5","label":true,"label-position":"nw","color":"#f8f8f2"},"nodes":["04321e7a03e72bf4","9df4438144c70a31","e846c317608d92e4","03ac35d4ab9c5d1d","791fb525caa13c92","066c52b53603d15a","5720db72d29eaf2b","fa43a9c2f9cd3f6d","36f6948bd64dce3c","0c6f76583d1d2ac3","bce94e868148159b","ecbb05c3681941fb","7022cd1d3bca66e8","1dd22459d15ebac4","76b35e011726e185","831be53a841e6abb","544ffa2f4067482d","05422c9896ca6ba1","1c29ed958dce1ff5","992e56e2bbddc0dc","ab7b2b5f62772abf","6a3236eee5d3ed05","9abef2f6d2da4231","25793869dd63a3fa","add829d7d47cfa8d","2aba077c07890374","975662dfa813c5f5","860310c9bf32a50c","8d93f2ee79527fba","917fa9999975b38b","6dddf8c4baa7fd84","28ead878953c417c","d32895c4730a3dc4","3442b12e3d218758","f5e2b7419acaf455","35df35d7ea3d6eb8","9dae024a8fccb4d5","b50127044f042625","9f4c5feabc093290","ba8dc27b8c3864c1"],"x":1074,"y":431,"w":612,"h":930},{"id":"04321e7a03e72bf4","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"100","nbRateUnits":"30","rateUnits":"second","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1160,"y":1140,"wires":[["9df4438144c70a31"]]},{"id":"9df4438144c70a31","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"Apparent Power","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"apparent_power","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"device_class\": msg.sensor_type ,\t   \"unit_of_measurement\": \"VA\",\t   \"value_template\": \"{{value_json.mainsApparentPower}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1320,"y":1140,"wires":[["ab7b2b5f62772abf","f5e2b7419acaf455"]]},{"id":"e846c317608d92e4","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"Humidity","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"humidity","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"device_class\": msg.sensor_type ,\t   \"unit_of_measurement\": \"%\",\t   \"value_template\": \"{{value_json.humidity}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1320,"y":520,"wires":[["ab7b2b5f62772abf"]]},{"id":"03ac35d4ab9c5d1d","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"Temp","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"temperature","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"device_class\": msg.sensor_type ,\t   \"unit_of_measurement\": \"°F\",\t   \"value_template\": \"{{value_json.fahrenheit}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1306,"y":568,"wires":[["ab7b2b5f62772abf"]]},{"id":"791fb525caa13c92","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"rate limit","pauseType":"timed","timeout":"5","timeoutUnits":"seconds","rate":"10","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1170,"y":520,"wires":[["e846c317608d92e4"]]},{"id":"066c52b53603d15a","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"10","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1170,"y":568,"wires":[["03ac35d4ab9c5d1d"]]},{"id":"5720db72d29eaf2b","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"too many","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"3","nbRateUnits":"10","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1170,"y":616,"wires":[["fa43a9c2f9cd3f6d"]]},{"id":"fa43a9c2f9cd3f6d","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"RSSI","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"signal_strength","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"device_class\": msg.sensor_type ,\t   \"unit_of_measurement\": \"dB\",\t    \"entity_category\": \"diagnostic\",\t   \"value_template\": \"{{value_json.rssi}}\",\t   \"device\": msg.device\t}","tot":"jsonata"}],"action":"","property":"","from":"","to":"","reg":false,"x":1306,"y":616,"wires":[[]]},{"id":"36f6948bd64dce3c","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"10","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1170,"y":664,"wires":[["0c6f76583d1d2ac3"]]},{"id":"0c6f76583d1d2ac3","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"Battery","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"battery","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"device_class\": msg.sensor_type ,\t   \"unit_of_measurement\": \"%\",\t   \"entity_category\": \"diagnostic\",\t   \"value_template\": \"{{value_json.batteryPercentage}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1316,"y":664,"wires":[["ab7b2b5f62772abf"]]},{"id":"bce94e868148159b","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"10","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1170,"y":712,"wires":[["ecbb05c3681941fb"]]},{"id":"ecbb05c3681941fb","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"IAQ","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"iaqIndex","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type,\t   \"unique_id\" : msg.sensor_mac_clean & \"-iaqIndex\",\t   \"device_class\": \"aqi\",\t   \"value_template\": \"{{value_json.iaqIndex}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1306,"y":712,"wires":[["ab7b2b5f62772abf"]]},{"id":"7022cd1d3bca66e8","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"10","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1170,"y":808,"wires":[["1dd22459d15ebac4"]]},{"id":"1dd22459d15ebac4","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"TVOC","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"tvoc","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type,\t   \"unique_id\" : msg.sensor_mac_clean & \"-tvoc\",\t   \"device_class\": \"volatile_organic_compounds\",\t   \"unit_of_measurement\": \"µg/m³\",\t   \"value_template\": \"{{value_json.tvoc}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1306,"y":808,"wires":[["ab7b2b5f62772abf","add829d7d47cfa8d"]]},{"id":"76b35e011726e185","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"10","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1170,"y":856,"wires":[["831be53a841e6abb"]]},{"id":"831be53a841e6abb","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"CO2","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"CO2","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type,\t   \"unique_id\" : msg.sensor_mac_clean & \"-CO2\",\t   \"device_class\": \"carbon_dioxide\",\t   \"unit_of_measurement\": \"ppm\",\t   \"value_template\": \"{{value_json.CO2}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1306,"y":856,"wires":[["ab7b2b5f62772abf"]]},{"id":"544ffa2f4067482d","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"10","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1170,"y":760,"wires":[["05422c9896ca6ba1"]]},{"id":"05422c9896ca6ba1","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"AQMetric","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"aqm","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type,\t   \"unique_id\" : msg.sensor_mac_clean & \"-aqm\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1316,"y":760,"wires":[["ab7b2b5f62772abf"]]},{"id":"1c29ed958dce1ff5","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"10","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1170,"y":472,"wires":[["992e56e2bbddc0dc"]]},{"id":"992e56e2bbddc0dc","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"Button Pressed","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"button","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"force_update\" : true,\t   \"value_template\": \"{{value_json.action}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1340,"y":472,"wires":[["ab7b2b5f62772abf","ba8dc27b8c3864c1"]]},{"id":"ab7b2b5f62772abf","type":"function","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"Sensor","func":"msg.topic = msg.discovery_sensor + msg.sensor_mac_clean + \"/\" + msg.sensor_type + \"/config\" \nmsg.payload.state_topic = msg.old_topic\nreturn msg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":1575,"y":610,"wires":[["6a3236eee5d3ed05","56fb163c58ae8ef4"]]},{"id":"6a3236eee5d3ed05","type":"debug","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","statusVal":"","statusType":"auto","x":1585,"y":655,"wires":[]},{"id":"9abef2f6d2da4231","type":"debug","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","statusVal":"","statusType":"auto","x":1590,"y":900,"wires":[]},{"id":"25793869dd63a3fa","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"PM25","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"pm25","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type,\t   \"unique_id\" : msg.sensor_mac_clean & \"-pm25\",\t   \"device_class\": \"pm25\",\t   \"unit_of_measurement\": \"µg/m³\",\t   \"value_template\": \"{{value_json.PM2_5MassConcentration}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1310,"y":900,"wires":[["ab7b2b5f62772abf","9abef2f6d2da4231"]]},{"id":"add829d7d47cfa8d","type":"debug","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"","active":false,"tosidebar":true,"console":false,"tostatus":true,"complete":"true","targetType":"full","statusVal":"payload","statusType":"auto","x":1550,"y":740,"wires":[]},{"id":"2aba077c07890374","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"100","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1160,"y":960,"wires":[["28ead878953c417c"]]},{"id":"975662dfa813c5f5","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"100","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1160,"y":1020,"wires":[["860310c9bf32a50c"]]},{"id":"860310c9bf32a50c","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"Current","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"current","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"device_class\": msg.sensor_type ,\t   \"unit_of_measurement\": \"A\",\t   \"value_template\": \"{{value_json.mainsCurrent}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1300,"y":1020,"wires":[["ab7b2b5f62772abf","f5e2b7419acaf455"]]},{"id":"8d93f2ee79527fba","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"100","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1160,"y":1080,"wires":[["917fa9999975b38b"]]},{"id":"917fa9999975b38b","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"Watts","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"power","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"device_class\": msg.sensor_type ,\t   \"unit_of_measurement\": \"W\",\t   \"value_template\": \"{{value_json.mainsRealPower}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1310,"y":1080,"wires":[["ab7b2b5f62772abf","f5e2b7419acaf455"]]},{"id":"6dddf8c4baa7fd84","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"100","nbRateUnits":"1","rateUnits":"minute","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1160,"y":900,"wires":[["25793869dd63a3fa"]]},{"id":"28ead878953c417c","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"Volts","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"voltage","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"device_class\": msg.sensor_type ,\t   \"unit_of_measurement\": \"V\",\t   \"value_template\": \"{{value_json.mainsVolts}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1310,"y":960,"wires":[["ab7b2b5f62772abf","f5e2b7419acaf455"]]},{"id":"d32895c4730a3dc4","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"100","nbRateUnits":"30","rateUnits":"second","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1160,"y":1200,"wires":[["3442b12e3d218758"]]},{"id":"3442b12e3d218758","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"Energy","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"energy","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"device_class\": msg.sensor_type ,\t   \"unit_of_measurement\": \"Wh\",\t   \"value_template\": \"{{value_json.mainsDeltaEnergy}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1310,"y":1200,"wires":[["ab7b2b5f62772abf","f5e2b7419acaf455"]]},{"id":"f5e2b7419acaf455","type":"debug","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"","active":false,"tosidebar":true,"console":false,"tostatus":true,"complete":"true","targetType":"full","statusVal":"sensor_name","statusType":"msg","x":1590,"y":980,"wires":[]},{"id":"35df35d7ea3d6eb8","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"100","nbRateUnits":"30","rateUnits":"second","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1160,"y":1260,"wires":[["9dae024a8fccb4d5"]]},{"id":"9dae024a8fccb4d5","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"Frequency","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"frequency","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"device_class\": msg.sensor_type ,\t   \"unit_of_measurement\": \"Hz\",\t   \"value_template\": \"{{value_json.mainsFrequency}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1330,"y":1260,"wires":[["ab7b2b5f62772abf","f5e2b7419acaf455"]]},{"id":"b50127044f042625","type":"delay","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"rate limit","pauseType":"queue","timeout":"5","timeoutUnits":"seconds","rate":"100","nbRateUnits":"30","rateUnits":"second","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":true,"allowrate":false,"outputs":1,"x":1160,"y":1320,"wires":[["9f4c5feabc093290"]]},{"id":"9f4c5feabc093290","type":"change","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"Power Factor","rules":[{"t":"set","p":"sensor_type","pt":"msg","to":"power_factor","tot":"str"},{"t":"move","p":"topic","pt":"msg","to":"old_topic","tot":"msg"},{"t":"move","p":"payload","pt":"msg","to":"oldpayload","tot":"msg"},{"t":"set","p":"payload","pt":"msg","to":"{\t   \"name\": msg.sensor_type ,\t   \"unique_id\" : msg.sensor_mac_clean & \"-\" & msg.sensor_type,\t   \"device_class\": msg.sensor_type ,\t   \"unit_of_measurement\": \"%\",\t   \"value_template\": \"{{value_json.mainsPowerFactor}}\",\t   \"device\": msg.device\t}","tot":"jsonata"},{"t":"set","p":"retain","pt":"msg","to":"true","tot":"bool"}],"action":"","property":"","from":"","to":"","reg":false,"x":1340,"y":1320,"wires":[["ab7b2b5f62772abf","f5e2b7419acaf455"]]},{"id":"ba8dc27b8c3864c1","type":"debug","z":"b4985dde22c96f8f","g":"1c71852263741650","name":"","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","statusVal":"","statusType":"auto","x":1590,"y":500,"wires":[]},{"id":"3a8e476dcb7978ce","type":"mqtt-broker","name":"HA-Mosquitto","broker":"core-mosquitto","port":"1883","clientid":"","autoConnect":true,"usetls":false,"protocolVersion":"5","keepalive":"60","cleansession":true,"birthTopic":"","birthQos":"0","birthPayload":"","birthMsg":{},"closeTopic":"","closeQos":"0","closePayload":"","closeMsg":{},"willTopic":"","willQos":"0","willPayload":"","willMsg":{},"sessionExpiry":""}]
+[
+  {
+    "id": "60babf6dba5646f2",
+    "type": "tab",
+    "label": "Meraki Sensors",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "c901926bc59ad831",
+    "type": "group",
+    "z": "60babf6dba5646f2",
+    "name": "Not required but a flow that combines sensor name to mac and serial binding",
+    "style": {
+      "label": true,
+      "label-position": "se",
+      "stroke": "#ffff00",
+      "color": "#ff0000"
+    },
+    "nodes": [
+      "7230ee858df28e40",
+      "d4de5f45de3c4e77"
+    ],
+    "x": 254,
+    "y": 839,
+    "w": 484,
+    "h": 130
+  },
+  {
+    "id": "04c362a1b35ff306",
+    "type": "group",
+    "z": "60babf6dba5646f2",
+    "name": "grab the sensor info and add attribute with name",
+    "style": {
+      "stroke": "#6f2fa0",
+      "label": true,
+      "color": "#ff0000"
+    },
+    "nodes": [
+      "166dfe9b0266990e",
+      "b1d02a1ae6308298",
+      "6cedcdd541e32254",
+      "fbdbb211bc7639cc",
+      "e417f26b9ed51ac5",
+      "8c58cf6f11af7b44",
+      "32a37685372c1e27",
+      "ba4928aedccf75a4"
+    ],
+    "x": 14,
+    "y": 459,
+    "w": 672,
+    "h": 242
+  },
+  {
+    "id": "d92d917b195451bc",
+    "type": "group",
+    "z": "60babf6dba5646f2",
+    "name": "Binary Sensors",
+    "style": {
+      "stroke": "#0070c0",
+      "label": true
+    },
+    "nodes": [
+      "919239d3efebfb3a",
+      "bc4347495b61fc93",
+      "328f029e12bebf17",
+      "4a61d18450e34fbf",
+      "2fd016e89faf95b9",
+      "151dc8e579f05007",
+      "442dd2c612d3187a",
+      "d874b1fb081f2a16",
+      "e068c857e7b21e63",
+      "fdf83bbd52465411",
+      "1c3f4816a586bdef"
+    ],
+    "x": 1214,
+    "y": 134,
+    "w": 752,
+    "h": 367
+  },
+  {
+    "id": "92e98dd017c3b979",
+    "type": "group",
+    "z": "60babf6dba5646f2",
+    "name": "Create The Global Key Store",
+    "style": {
+      "stroke": "#92d04f",
+      "label": true
+    },
+    "nodes": [
+      "024adea52310ac7e",
+      "8e0fc22bfd70dba4",
+      "3c1065a5aedb0643",
+      "7b56b52871bee5d6",
+      "a8267de3968784c9",
+      "ebeafd293ebc80ee",
+      "ec98cc703fef71ab",
+      "e3fc69bb049540b2"
+    ],
+    "x": 142,
+    "y": 187,
+    "w": 628,
+    "h": 226
+  },
+  {
+    "id": "1c71852263741650",
+    "type": "group",
+    "z": "60babf6dba5646f2",
+    "style": {
+      "stroke": "#11120f",
+      "stroke-opacity": "1",
+      "fill": "#23241f",
+      "fill-opacity": "0.5",
+      "label": true,
+      "label-position": "nw",
+      "color": "#f8f8f2"
+    },
+    "nodes": [
+      "9df4438144c70a31",
+      "e846c317608d92e4",
+      "03ac35d4ab9c5d1d",
+      "fa43a9c2f9cd3f6d",
+      "0c6f76583d1d2ac3",
+      "ecbb05c3681941fb",
+      "1dd22459d15ebac4",
+      "831be53a841e6abb",
+      "05422c9896ca6ba1",
+      "992e56e2bbddc0dc",
+      "ab7b2b5f62772abf",
+      "6a3236eee5d3ed05",
+      "25793869dd63a3fa",
+      "860310c9bf32a50c",
+      "917fa9999975b38b",
+      "28ead878953c417c",
+      "3442b12e3d218758",
+      "9dae024a8fccb4d5",
+      "9f4c5feabc093290",
+      "365d4ead1ceea39b",
+      "21a09900023556ee",
+      "6ea97af308a0c2f6",
+      "897755f84126c5b9",
+      "c75458f6cab67236",
+      "a349b6035b805a49"
+    ],
+    "x": 1234,
+    "y": 539,
+    "w": 772,
+    "h": 1182
+  },
+  {
+    "id": "51122177d6ae6af1",
+    "type": "switch",
+    "z": "60babf6dba5646f2",
+    "name": "Sort Topics",
+    "property": "original_topic",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "cont",
+        "v": "/door",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/waterDetection",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/usbPowered",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/tamperDetection",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/batteryCoverPresent",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/cableConnected",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/buttonPressed",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/buttonReleased",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/humidity",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/temperature",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/rssi",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/batteryPercentage",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/iaqIndex",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/aqmScores",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/tvoc",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/CO2",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/PM2_5MassConcentration",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/ambientNoise",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/probeType",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/missedConnections",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/ambientPressure",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/mainsVolts",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/mainsCurrent",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/mainsRealPower",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/mainsApparentPower",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/mainsDeltaEnergy",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/mainsFrequency",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/mainsPowerControl",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/mainsPowerFactor",
+        "vt": "str"
+      },
+      {
+        "t": "cont",
+        "v": "/missedConnections",
+        "vt": "str"
+      },
+      {
+        "t": "else"
+      }
+    ],
+    "checkall": "false",
+    "repair": false,
+    "outputs": 31,
+    "x": 930,
+    "y": 660,
+    "wires": [
+      [
+        "919239d3efebfb3a"
+      ],
+      [
+        "bc4347495b61fc93"
+      ],
+      [
+        "328f029e12bebf17"
+      ],
+      [
+        "4a61d18450e34fbf"
+      ],
+      [
+        "2fd016e89faf95b9"
+      ],
+      [
+        "151dc8e579f05007"
+      ],
+      [
+        "1c3f4816a586bdef"
+      ],
+      [
+        "992e56e2bbddc0dc"
+      ],
+      [
+        "e846c317608d92e4"
+      ],
+      [
+        "03ac35d4ab9c5d1d"
+      ],
+      [
+        "fa43a9c2f9cd3f6d"
+      ],
+      [
+        "0c6f76583d1d2ac3"
+      ],
+      [
+        "ecbb05c3681941fb"
+      ],
+      [
+        "05422c9896ca6ba1",
+        "365d4ead1ceea39b",
+        "21a09900023556ee",
+        "6ea97af308a0c2f6",
+        "897755f84126c5b9",
+        "c75458f6cab67236"
+      ],
+      [
+        "1dd22459d15ebac4"
+      ],
+      [
+        "831be53a841e6abb"
+      ],
+      [
+        "25793869dd63a3fa"
+      ],
+      [
+        "a349b6035b805a49"
+      ],
+      [
+        "10a5fbfccbddfacd"
+      ],
+      [
+        "10a5fbfccbddfacd"
+      ],
+      [
+        "10a5fbfccbddfacd"
+      ],
+      [
+        "28ead878953c417c"
+      ],
+      [
+        "860310c9bf32a50c"
+      ],
+      [
+        "917fa9999975b38b"
+      ],
+      [
+        "9df4438144c70a31"
+      ],
+      [
+        "3442b12e3d218758"
+      ],
+      [
+        "9dae024a8fccb4d5"
+      ],
+      [
+        "10a5fbfccbddfacd"
+      ],
+      [
+        "9f4c5feabc093290"
+      ],
+      [
+        "10a5fbfccbddfacd"
+      ],
+      [
+        "10a5fbfccbddfacd"
+      ]
+    ]
+  },
+  {
+    "id": "56fb163c58ae8ef4",
+    "type": "mqtt out",
+    "z": "60babf6dba5646f2",
+    "name": "Send to HA (via MQTT)",
+    "topic": "",
+    "qos": "0",
+    "retain": "true",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "f874054eb620e77a",
+    "x": 2110,
+    "y": 500,
+    "wires": []
+  },
+  {
+    "id": "4f983773eee2edc8",
+    "type": "debug",
+    "z": "60babf6dba5646f2",
+    "name": "",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 622,
+    "y": 756,
+    "wires": []
+  },
+  {
+    "id": "10a5fbfccbddfacd",
+    "type": "debug",
+    "z": "60babf6dba5646f2",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 850,
+    "y": 1180,
+    "wires": []
+  },
+  {
+    "id": "32a37685372c1e27",
+    "type": "counter",
+    "z": "60babf6dba5646f2",
+    "g": "04c362a1b35ff306",
+    "name": "",
+    "init": "0",
+    "step": "1",
+    "lower": "",
+    "upper": "",
+    "mode": "increment",
+    "outputs": 1,
+    "x": 600,
+    "y": 660,
+    "wires": [
+      [
+        "51122177d6ae6af1"
+      ]
+    ]
+  },
+  {
+    "id": "7230ee858df28e40",
+    "type": "function",
+    "z": "60babf6dba5646f2",
+    "g": "c901926bc59ad831",
+    "name": "create msg.details debug",
+    "func": "//msg.dev_details = global.get( msg.sensor_mac + \"_dev\")\nmsg.details = {\n    \"sensor_devvar\" : msg.sensor_mac + \"_dev\" , \n    \"sensor_name\" : msg.sensor_name ,\n    \"sensor_mac\" : msg.sensor_mac ,\n    \"sensor_mac_clean\" : msg.sensor_mac_clean ,\n    \"sensor_dev_details\" : msg.sensor_dev_details\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 390,
+    "y": 880,
+    "wires": [
+      [
+        "d4de5f45de3c4e77"
+      ]
+    ]
+  },
+  {
+    "id": "d4de5f45de3c4e77",
+    "type": "debug",
+    "z": "60babf6dba5646f2",
+    "g": "c901926bc59ad831",
+    "name": "Debug Naming info",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "details",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 390,
+    "y": 920,
+    "wires": []
+  },
+  {
+    "id": "166dfe9b0266990e",
+    "type": "function",
+    "z": "60babf6dba5646f2",
+    "g": "04c362a1b35ff306",
+    "name": "set topic discovery vars",
+    "func": "msg.discovery_sensor = \"homeassistant/sensor/\"\nmsg.discovery_binary_sensor = \"homeassistant/binary_sensor/\"\nmsg.discovery_button = \"homeassistant/button/\"\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 370,
+    "y": 500,
+    "wires": [
+      [
+        "6cedcdd541e32254"
+      ]
+    ]
+  },
+  {
+    "id": "b1d02a1ae6308298",
+    "type": "function",
+    "z": "60babf6dba5646f2",
+    "g": "04c362a1b35ff306",
+    "name": "Look up Name",
+    "func": "var device = global.get(msg.sensor_mac);\nmsg.sensor_name = device.name;\nmsg.device = device\nreturn msg; ",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 136,
+    "y": 548,
+    "wires": [
+      [
+        "fbdbb211bc7639cc"
+      ]
+    ]
+  },
+  {
+    "id": "6cedcdd541e32254",
+    "type": "string",
+    "z": "60babf6dba5646f2",
+    "g": "04c362a1b35ff306",
+    "name": "Filter MAC",
+    "methods": [
+      {
+        "name": "delLeftMost",
+        "params": [
+          {
+            "type": "str",
+            "value": "/ble/"
+          }
+        ]
+      },
+      {
+        "name": "delRightMost",
+        "params": [
+          {
+            "type": "str",
+            "value": "/"
+          }
+        ]
+      },
+      {
+        "name": "delRightMost",
+        "params": [
+          {
+            "type": "str",
+            "value": "/gateway"
+          }
+        ]
+      },
+      {
+        "name": "toLowerCase",
+        "params": []
+      }
+    ],
+    "prop": "topic",
+    "propout": "sensor_mac",
+    "object": "msg",
+    "objectout": "msg",
+    "x": 578,
+    "y": 500,
+    "wires": [
+      [
+        "b1d02a1ae6308298"
+      ]
+    ]
+  },
+  {
+    "id": "fbdbb211bc7639cc",
+    "type": "string",
+    "z": "60babf6dba5646f2",
+    "g": "04c362a1b35ff306",
+    "name": "replace colon with dash",
+    "methods": [
+      {
+        "name": "replaceAll",
+        "params": [
+          {
+            "type": "str",
+            "value": ":"
+          },
+          {
+            "type": "str",
+            "value": "-"
+          }
+        ]
+      }
+    ],
+    "prop": "sensor_mac",
+    "propout": "sensor_mac_clean",
+    "object": "msg",
+    "objectout": "msg",
+    "x": 374,
+    "y": 548,
+    "wires": [
+      [
+        "7230ee858df28e40",
+        "4f983773eee2edc8",
+        "ba4928aedccf75a4"
+      ]
+    ]
+  },
+  {
+    "id": "e417f26b9ed51ac5",
+    "type": "mqtt in",
+    "z": "60babf6dba5646f2",
+    "g": "04c362a1b35ff306",
+    "name": "HA MQTT",
+    "topic": "meraki/v1/mt/+/ble/#",
+    "qos": "2",
+    "datatype": "json",
+    "broker": "f874054eb620e77a",
+    "nl": false,
+    "rap": false,
+    "rh": "2",
+    "inputs": 0,
+    "x": 100,
+    "y": 500,
+    "wires": [
+      [
+        "166dfe9b0266990e",
+        "4f983773eee2edc8"
+      ]
+    ]
+  },
+  {
+    "id": "1c3f4816a586bdef",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "d92d917b195451bc",
+    "name": "buttonPressed_not_MT30",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Button Pressed",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"availability_topic\": msg.original_topic,\t    \"command_topic\" : msg.original_topic,\t    \"command_template\": \"{{value_json.buttonPressed}}\",\t    \"availability_template\": \"{{value_json.buttonPressed}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1350,
+    "y": 460,
+    "wires": [
+      [
+        "fdf83bbd52465411"
+      ]
+    ]
+  },
+  {
+    "id": "919239d3efebfb3a",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "d92d917b195451bc",
+    "name": "Door",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Door",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"device_class\": \"door\",\t    \"value_template\": \"{{value_json.open}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1296,
+    "y": 175,
+    "wires": [
+      [
+        "442dd2c612d3187a"
+      ]
+    ]
+  },
+  {
+    "id": "bc4347495b61fc93",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "d92d917b195451bc",
+    "name": "Moisture",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Moisture",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"device_class\": \"moisture\",\t    \"value_template\": \"{{value_json.wet}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1310,
+    "y": 223,
+    "wires": [
+      [
+        "442dd2c612d3187a"
+      ]
+    ]
+  },
+  {
+    "id": "328f029e12bebf17",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "d92d917b195451bc",
+    "name": "USB Power",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "USB Power",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"device_class\": \"power\",\t    \"icon\": \"mdi:power-plug\",\t    \"entity_category\": \"diagnostic\",\t    \"value_template\": \"{{value_json.usbPowered}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1320,
+    "y": 271,
+    "wires": [
+      [
+        "442dd2c612d3187a"
+      ]
+    ]
+  },
+  {
+    "id": "4a61d18450e34fbf",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "d92d917b195451bc",
+    "name": "Tamper",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Tampered",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"device_class\": \"tamper\",\t    \"entity_category\": \"diagnostic\",\t    \"value_template\": \"{{value_json.tamperDetection}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1310,
+    "y": 319,
+    "wires": [
+      [
+        "442dd2c612d3187a"
+      ]
+    ]
+  },
+  {
+    "id": "2fd016e89faf95b9",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "d92d917b195451bc",
+    "name": "Battery Cover",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Battery Cover",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t   \"entity_category\": \"diagnostic\",\t   \"value_template\": \"{{value_json.batteryCoverPresent}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1330,
+    "y": 367,
+    "wires": [
+      [
+        "442dd2c612d3187a"
+      ]
+    ]
+  },
+  {
+    "id": "151dc8e579f05007",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "d92d917b195451bc",
+    "name": "Cable Connected",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Cable Connected",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"device_class\": \"plug\",\t    \"value_template\": \"{{value_json.cableConnected}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1340,
+    "y": 415,
+    "wires": [
+      [
+        "442dd2c612d3187a"
+      ]
+    ]
+  },
+  {
+    "id": "442dd2c612d3187a",
+    "type": "function",
+    "z": "60babf6dba5646f2",
+    "g": "d92d917b195451bc",
+    "name": "Binary Sensor",
+    "func": "const clean_sensor_id = msg.sensor_id.replace(/\\s+/g, '-').toLowerCase();\n\nmsg.topic = msg.discovery_binary_sensor + msg.sensor_mac_clean + \"/\" + clean_sensor_id + \"/config\";\nmsg.retain = true;\nmsg.payload.name = msg.sensor_id;\nmsg.payload.unique_id = msg.sensor_mac_clean + \"-\" + clean_sensor_id;\nmsg.payload.device = msg.device;\nmsg.payload.state_topic = msg.original_topic;\n    \nif (!(\"payload_on\" in msg.payload)) {\n    msg.payload.payload_on = true\n}\nif (!(\"payload_off\" in msg.payload)) {\n    msg.payload.payload_off = false\n}\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1720,
+    "y": 280,
+    "wires": [
+      [
+        "d874b1fb081f2a16",
+        "56fb163c58ae8ef4"
+      ]
+    ]
+  },
+  {
+    "id": "d874b1fb081f2a16",
+    "type": "debug",
+    "z": "60babf6dba5646f2",
+    "g": "d92d917b195451bc",
+    "name": "",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1870,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "fdf83bbd52465411",
+    "type": "function",
+    "z": "60babf6dba5646f2",
+    "g": "d92d917b195451bc",
+    "name": "Button",
+    "func": "const clean_sensor_id = msg.sensor_id.replace(/\\s+/g, '-').toLowerCase();\n\nmsg.topic = msg.discovery_button + msg.sensor_mac_clean + \"/\" + clean_sensor_id + \"/config\";\nmsg.retain = true;\nmsg.payload.name = msg.sensor_id;\nmsg.payload.unique_id = msg.sensor_mac_clean + \"-\" + clean_sensor_id;\nmsg.payload.device = msg.device;\nmsg.payload.state_topic = msg.original_topic;\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1630,
+    "y": 460,
+    "wires": [
+      [
+        "e068c857e7b21e63",
+        "56fb163c58ae8ef4"
+      ]
+    ]
+  },
+  {
+    "id": "e068c857e7b21e63",
+    "type": "debug",
+    "z": "60babf6dba5646f2",
+    "g": "d92d917b195451bc",
+    "name": "",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1750,
+    "y": 400,
+    "wires": []
+  },
+  {
+    "id": "024adea52310ac7e",
+    "type": "inject",
+    "z": "60babf6dba5646f2",
+    "g": "92e98dd017c3b979",
+    "name": "Build Org-Wide name dB",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "300",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 298,
+    "y": 228,
+    "wires": [
+      [
+        "8e0fc22bfd70dba4"
+      ]
+    ]
+  },
+  {
+    "id": "8e0fc22bfd70dba4",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "92e98dd017c3b979",
+    "name": "Set the Meraki Org_ID",
+    "rules": [
+      {
+        "t": "set",
+        "p": "org_id",
+        "pt": "msg",
+        "to": "960534",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 592,
+    "y": 228,
+    "wires": [
+      [
+        "3c1065a5aedb0643"
+      ]
+    ]
+  },
+  {
+    "id": "3c1065a5aedb0643",
+    "type": "secret",
+    "z": "60babf6dba5646f2",
+    "g": "92e98dd017c3b979",
+    "name": "apiKey",
+    "x": 310,
+    "y": 276,
+    "wires": [
+      [
+        "7b56b52871bee5d6"
+      ]
+    ]
+  },
+  {
+    "id": "7b56b52871bee5d6",
+    "type": "function",
+    "z": "60babf6dba5646f2",
+    "g": "92e98dd017c3b979",
+    "name": "Headers for Device List",
+    "func": "msg.url = \"https://api.meraki.com/api/v1/organizations/\" + msg.org_id +\"/devices\";\nmsg.headers = {};\nmsg.headers['content-type'] = 'application/json';\nmsg.headers['X-Cisco-Meraki-API-Key'] = msg.secret ;\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 610,
+    "y": 276,
+    "wires": [
+      [
+        "a8267de3968784c9"
+      ]
+    ]
+  },
+  {
+    "id": "a8267de3968784c9",
+    "type": "http request",
+    "z": "60babf6dba5646f2",
+    "g": "92e98dd017c3b979",
+    "name": "Devices - Req",
+    "method": "GET",
+    "ret": "obj",
+    "paytoqs": "ignore",
+    "url": "",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "authType": "",
+    "senderr": true,
+    "x": 292,
+    "y": 324,
+    "wires": [
+      [
+        "ebeafd293ebc80ee"
+      ]
+    ]
+  },
+  {
+    "id": "ebeafd293ebc80ee",
+    "type": "function",
+    "z": "60babf6dba5646f2",
+    "g": "92e98dd017c3b979",
+    "name": "Create Global Key Store",
+    "func": "for (const device of msg.payload) {\n  if (device.model.startsWith(\"MT\")) {\n    let version = device.firmware.replace(\"-\", \" \").replace(/-/g, \".\").toUpperCase();\n    \n    global.set(device.mac, {\n      \"identifiers\": device.serial,\n      \"name\": device.name || device.mac,\n      \"model\": device.model,\n      \"hw_version\": device.serial,\n      \"sw_version\": version,\n      \"configuration_url\": device.url,\n      \"manufacturer\": \"Cisco Meraki\",\n    });\n  }\n}\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 634,
+    "y": 324,
+    "wires": [
+      [
+        "ec98cc703fef71ab"
+      ]
+    ]
+  },
+  {
+    "id": "ec98cc703fef71ab",
+    "type": "function",
+    "z": "60babf6dba5646f2",
+    "g": "92e98dd017c3b979",
+    "name": "validate",
+    "func": "msg.device = global.get(\"2c:3f:0b:ff:ed:75\");\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 296,
+    "y": 372,
+    "wires": [
+      [
+        "e3fc69bb049540b2"
+      ]
+    ]
+  },
+  {
+    "id": "e3fc69bb049540b2",
+    "type": "debug",
+    "z": "60babf6dba5646f2",
+    "g": "92e98dd017c3b979",
+    "name": "",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 426,
+    "y": 372,
+    "wires": []
+  },
+  {
+    "id": "9df4438144c70a31",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "Apparent Power",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Apparent Power",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"device_class\": \"apparent_power\",\t    \"unit_of_measurement\": \"VA\",\t    \"value_template\": \"{{value_json.mainsApparentPower}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1360,
+    "y": 1500,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "e846c317608d92e4",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "Humidity",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Humidity",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t   \"device_class\": \"humidity\",\t   \"unit_of_measurement\": \"%\",\t   \"value_template\": \"{{value_json.humidity}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1320,
+    "y": 620,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "03ac35d4ab9c5d1d",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "Temp",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Temperature",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t   \"device_class\": \"temperature\",\t   \"unit_of_measurement\": \"°C\",\t   \"value_template\": \"{{value_json.celsius}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1310,
+    "y": 660,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "fa43a9c2f9cd3f6d",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "RSSI",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Signal Strength",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"device_class\": \"signal_strength\",\t    \"unit_of_measurement\": \"dB\",\t    \"entity_category\": \"diagnostic\",\t    \"value_template\": \"{{value_json.rssi}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1310,
+    "y": 700,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "0c6f76583d1d2ac3",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "Battery",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Battery",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"device_class\": \"battery\",\t    \"unit_of_measurement\": \"%\",\t    \"entity_category\": \"diagnostic\",\t    \"value_template\": \"{{value_json.batteryPercentage}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1320,
+    "y": 740,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "ecbb05c3681941fb",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "IAQ",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Air Quality",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"device_class\": \"aqi\",\t    \"value_template\": \"{{value_json.iaqIndex}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1316,
+    "y": 821.3333333333331,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "1dd22459d15ebac4",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "TVOC",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "TVOC",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"device_class\": \"volatile_organic_compounds\",\t    \"unit_of_measurement\": \"µg/m³\",\t    \"value_template\": \"{{value_json.tvoc}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1326,
+    "y": 1168,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "831be53a841e6abb",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "CO2",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "CO2",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"device_class\": \"carbon_dioxide\",\t    \"unit_of_measurement\": \"ppm\",\t    \"value_template\": \"{{value_json.CO2}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1326,
+    "y": 1216,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "05422c9896ca6ba1",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "Temp Metric",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Temperature Metric",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t   \"value_template\": \"{{value_json.temperature}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1336,
+    "y": 868,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "992e56e2bbddc0dc",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "Button Pressed",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Button",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t   \"force_update\" : true,\t   \"value_template\": \"{{value_json.action}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1340,
+    "y": 580,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "ab7b2b5f62772abf",
+    "type": "function",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "Sensor",
+    "func": "const clean_sensor_id = msg.sensor_id.toLowerCase().replace(/[^a-zA-Z0-9_-]+/g, '-');\n\nmsg.topic = msg.discovery_sensor + msg.sensor_mac_clean + \"/\" + clean_sensor_id + \"/config\";\nmsg.retain = true;\nmsg.payload.name = msg.sensor_id;\nmsg.payload.unique_id = msg.sensor_mac_clean + \"-\" + clean_sensor_id;\nmsg.payload.device = msg.device;\nmsg.payload.state_topic = msg.original_topic;\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1740,
+    "y": 680,
+    "wires": [
+      [
+        "6a3236eee5d3ed05",
+        "56fb163c58ae8ef4"
+      ]
+    ]
+  },
+  {
+    "id": "6a3236eee5d3ed05",
+    "type": "debug",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1910,
+    "y": 680,
+    "wires": []
+  },
+  {
+    "id": "25793869dd63a3fa",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "PM25",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "PM2.5",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t   \"device_class\": \"pm25\",\t   \"unit_of_measurement\": \"µg/m³\",\t   \"value_template\": \"{{value_json.PM2_5MassConcentration}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1330,
+    "y": 1260,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "860310c9bf32a50c",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "Current",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Current",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"device_class\": \"current\",\t    \"unit_of_measurement\": \"A\",\t    \"value_template\": \"{{value_json.mainsCurrent}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1340,
+    "y": 1380,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "917fa9999975b38b",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "Watts",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Power",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"device_class\": \"power\",\t    \"unit_of_measurement\": \"W\",\t    \"value_template\": \"{{value_json.mainsRealPower}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1330,
+    "y": 1440,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "28ead878953c417c",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "Volts",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Voltage",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"device_class\": \"voltage\",\t    \"unit_of_measurement\": \"V\",\t    \"value_template\": \"{{value_json.mainsVolts}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1330,
+    "y": 1340,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "3442b12e3d218758",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "Energy",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Energy",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"device_class\": \"energy\",\t    \"unit_of_measurement\": \"Wh\",\t    \"value_template\": \"{{ (value_json.mainsDeltaEnergy | int(0)) + (states(entity_id) | int(0)) }}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1340,
+    "y": 1560,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "9dae024a8fccb4d5",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "Frequency",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Frequency",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t    \"device_class\": \"frequency\",\t    \"unit_of_measurement\": \"Hz\",\t    \"value_template\": \"{{value_json.mainsFrequency}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1350,
+    "y": 1620,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "9f4c5feabc093290",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "Power Factor",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Power Factor",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t   \"device_class\": \"power_factor\",\t   \"unit_of_measurement\": \"%\",\t   \"value_template\": \"{{value_json.mainsPowerFactor}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1360,
+    "y": 1680,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "8c58cf6f11af7b44",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "04c362a1b35ff306",
+    "name": "move payload/topic to original_",
+    "rules": [
+      {
+        "t": "move",
+        "p": "payload",
+        "pt": "msg",
+        "to": "original_payload",
+        "tot": "msg"
+      },
+      {
+        "t": "move",
+        "p": "topic",
+        "pt": "msg",
+        "to": "original_topic",
+        "tot": "msg"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 370,
+    "y": 660,
+    "wires": [
+      [
+        "32a37685372c1e27"
+      ]
+    ]
+  },
+  {
+    "id": "365d4ead1ceea39b",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "Humidity Metric",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Humidity Metric",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t   \"value_template\": \"{{value_json.humidity}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1350,
+    "y": 908,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "21a09900023556ee",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "TVOC Metric",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "TVOC Metric",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t   \"value_template\": \"{{value_json.tvoc}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1340,
+    "y": 948,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "6ea97af308a0c2f6",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "Noise Metric",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Noise Metric",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t   \"value_template\": \"{{value_json.ambientNoise}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1340,
+    "y": 988,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "897755f84126c5b9",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "CO2 Metric",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "CO2 Metric",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t   \"value_template\": \"{{value_json.CO2}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1340,
+    "y": 1028,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "c75458f6cab67236",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "PM25 Metric",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "PM2.5 Metric",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t   \"value_template\": \"{{value_json.PM2_5MassConcentration}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1340,
+    "y": 1068,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "ba4928aedccf75a4",
+    "type": "delay",
+    "z": "60babf6dba5646f2",
+    "g": "04c362a1b35ff306",
+    "name": "rate limit",
+    "pauseType": "timed",
+    "timeout": "5",
+    "timeoutUnits": "seconds",
+    "rate": "10",
+    "nbRateUnits": "1",
+    "rateUnits": "minute",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": true,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 140,
+    "y": 660,
+    "wires": [
+      [
+        "8c58cf6f11af7b44"
+      ]
+    ]
+  },
+  {
+    "id": "a349b6035b805a49",
+    "type": "change",
+    "z": "60babf6dba5646f2",
+    "g": "1c71852263741650",
+    "name": "Noise",
+    "rules": [
+      {
+        "t": "set",
+        "p": "sensor_id",
+        "pt": "msg",
+        "to": "Noise",
+        "tot": "str"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "{\t   \"device_class\": \"sound_pressure\",\t   \"unit_of_measurement\": \"dBA\",\t   \"value_template\": \"{{value_json.ambientNoise}}\"\t}",
+        "tot": "jsonata"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1330,
+    "y": 1300,
+    "wires": [
+      [
+        "ab7b2b5f62772abf"
+      ]
+    ]
+  },
+  {
+    "id": "f874054eb620e77a",
+    "type": "mqtt-broker",
+    "name": "MQTT Broker",
+    "broker": "localhost",
+    "port": "1883",
+    "clientid": "",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": "5",
+    "keepalive": "60",
+    "cleansession": true,
+    "autoUnsubscribe": true,
+    "birthTopic": "ha-node-red/birth",
+    "birthQos": "0",
+    "birthPayload": "im alive!",
+    "birthMsg": {
+      "contentType": "text/plain"
+    },
+    "closeTopic": "ha-node-red/euthanasia",
+    "closeQos": "0",
+    "closePayload": "Im dying!",
+    "closeMsg": {
+      "contentType": "text/plain"
+    },
+    "willTopic": "ha-node-red/death",
+    "willQos": "0",
+    "willPayload": "Im dead!",
+    "willMsg": {
+      "contentType": "text/plain"
+    },
+    "userProps": "",
+    "sessionExpiry": ""
+  }
+]
